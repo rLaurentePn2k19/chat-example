@@ -139,55 +139,86 @@
       overflow-y: auto;
       z-index: 1;
     }
+
     .right_message {
-      border: 2px solid white;
       background: #70c5c0;
       float: right;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
       padding: 5px 10px;
-      width: 30%;
+      width: 35%;
       margin-right: -5%;
+      resize: vertical;
+      overflow: hidden;
+      border-radius: 8px;
     }
 
     .left_message {
-      border: 2px solid #ff3399;
-      background: skyblue;
+      background: #ff6699;
       float: left;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
       padding: 5px 10px;
-      width: 30%;
+      width: 35%;
       margin-left: -13%;
+      resize: vertical;
+      overflow: hidden;
+      border-radius: 8px;
     }
 
-    .user{
+    .user {
       float: left;
       margin-left: 33%;
       margin-right: 15%;
       margin-top: -100px;
       padding: 10px;
       font-size: 35px;
-      font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
       font-style: italic;
     }
-    #active_user{
+
+    #active_user {
       float: left;
       height: 350px;
       width: 150px;
-      margin-left: 15%;
+      margin-left: 12%;
     }
-    #online{
+
+    #online {
       color: yellowgreen;
     }
 
-    #offline{
+    #offline {
       color: gray;
     }
 
+    #disconnect_btn {
+      color: #fff;
+      border-radius: 4px;
+      background: #ff4d4d;
+      text-decoration: none;
+      transition: all 0.4s;
+      line-height: normal;
+      border: none;
+      width: 10%;
+      float: right;
+      margin-top: -8%;
+      margin-right: 2%;
+    }
 
+    #btn {
+      background: #0099ff;
+      color: #fff;
+      border-radius: 4px;
+    }
+
+    #messages {
+      margin-top: 5%;
+    }
   </style>
 </head>
 
 <body>
+
+  <button id="disconnect_btn" class="btn btn-primary btn-lg btn-block login-btn">Disconnect</button>
 
   <form id="setnickname_form">
     <div id="Login_form">
@@ -219,7 +250,8 @@
     <ul id="Welcome_msg"></ul>
   </div>
   <div class="modal-content" id="active_user">
-    <h4 style="color: black ; font-family: Verdana, Geneva, Tahoma, sans-serif">&nbsp;&nbsp;Active Users:</h4>
+    <h4 class="modal-header" style="color: black ;text-align: center; font-family: Verdana, Geneva, Tahoma, sans-serif">Active
+      Users</h4>
     <ul id="user_list"></ul>
   </div>
   <form id="chat-box" class="modal-content">
@@ -228,7 +260,7 @@
       <div id="typing_id" style="color:#ff6666"></div>
     </section>
   </form>
-  <form id="input_form" >
+  <form id="input_form">
     <input id="chat_input" class="modal-content" autocomplete="off" style="color: black">&nbsp;<button id="btn" class="btn btn-info btn-sm">Send</button>
   </form>
 
@@ -242,16 +274,19 @@
   var username = $("#username_id");
   var users = new Array();
   var socket = io();
+  var disCon_btn = $("#disconnect_btn");
 
   $(document).ready(function () {
     $("#input_form").hide();
     $("#chat-box").hide();
     $("#active_user").hide();
+    $("#disconnect_btn").hide();
     $("#submit_user").click(function () {
       $("#setnickname_form").hide();
       $("#chat-box").show();
       $("#input_form").show();
       $("#active_user").show();
+      $("#disconnect_btn").show();
     })
     $('form').submit(function (e) {
       e.preventDefault();
@@ -262,7 +297,7 @@
     $("#submit_user").click(function (e) {
       e.preventDefault();
       socket.emit('set_username', { username: username.val() })
-      $('#Welcome_msg').append($("<li class='user_text' style='margin-left: 100px'>")).text("Hi "+username.val()+", enjoy chatting!");
+      $('#Welcome_msg').append($("<li class='user_text' style='margin-left: 100px'>")).text("Hi " + username.val() + ", enjoy chatting!");
       console.log(username.val());
     })
     socket.on('chat message', function (msg) {
@@ -271,8 +306,6 @@
       } else {
         $("#messages").append("<div class='left_message'>" + msg.username + ": " + msg.message + "</div><br><br><br>")
       }
-      // $('#messages').append($('<li>').text(msg));
-      // window.scrollTo(0, document.body.scrollHeight);
     });
     $("#chat_input").bind("keypress", function () {
       socket.emit('typing');
@@ -285,52 +318,26 @@
         $("#typing_id").html('');
       }, 3000);
     })
-    
-    socket.on('set_username', function(data){
+
+    socket.on('set_username', function (data) {
       $('#user_list').empty();
-      for(let user in data){
+      for (let user in data) {
         let user_online = data[user].active
-        if(user_online){
-          $('#user_list').append("<li id='online'>" + '<h4 style="color:black">' + user +'</h4>'+ "</li>");
+        if (user_online) {
+          $('#user_list').append("<li id='online'>" + '<h4 style="color:black">' + user + '</h4>' + "</li>");
         }
-        else{
-          $('#user_list').append("<li id='offline'>" + '<h4 style="color:black">' + user +'</h4>'+ "</li>");
+        else {
+          $('#user_list').append("<li id='offline'>" + '<h4 style="color:black">' + user + '</h4>' + "</li>");
         }
       }
     })
 
-
-
-
-    // socket.on('chat message', function (msg) {
-    //   $("#messages").append("<li><b>" + msg[0] + ":</b> " + msg[1]);
-    // });
-    // socket.on('info', function (inf) {
-    //   $('#messages').append('<li><i>' + inf + '</i></li>');
-    // });
-    // socket.on('users list', function (users) {
-    //   userUpdate(users);
-    // });
-    // socket.on('typing signal', function (users) {
-    //   userUpdate(users);
-    // });
-    // $("#submit_user").click(function () {
-    //   let nickname = $("#username_id").val();
-    //   socket.emit("set nickname", nickname);
-    //   console.log(nickname)
-    // })
+    disCon_btn.click(function(){
+      console.log("clicked")
+      socket.disconnect();
+      
+    })
   });
-
-  // function userUpdate(x) {
-  //   let list = document.getElementById("user_list");
-  //   list.innerHTML = "";
-  //   for (var i = 0; i < x.length; i++) {
-  //     let item = document.createElement("li");
-  //     item.innerHTML = x[i];
-  //     list.appendChild(item);
-  //   }
-  // }
-
 </script>
 
 </html>
