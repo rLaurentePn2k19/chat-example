@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>O-Miguel</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <style type="text/css">
+    body {
+      font-family: 'Varela Round', sans-serif;
+      background: #45aba6;
+      color: white;
+    }
+
+    .modal-login {
+      color: #636363;
+      width: 350px;
+    }
+
+    .modal-login .modal-content {
+      padding: 20px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    .modal-login .modal-header {
+      border-bottom: none;
+      position: relative;
+      justify-content: center;
+    }
+
+    .modal-login h4 {
+      text-align: center;
+      font-size: 26px;
+      margin: 30px 0 -15px;
+    }
+
+    .modal-login .form-control:focus {
+      border-color: #70c5c0;
+    }
+
+    .modal-login .form-control,
+    .modal-login .btn {
+      min-height: 40px;
+      border-radius: 3px;
+    }
+
+    .modal-login .close {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+    }
+
+    .modal-login .modal-footer {
+      background: #ecf0f1;
+      border-color: #dee4e7;
+      text-align: center;
+      justify-content: center;
+      margin: 0 -20px -20px;
+      border-radius: 5px;
+      font-size: 13px;
+    }
+
+    .modal-login .modal-footer a {
+      color: #999;
+    }
+
+    .modal-login .avatar {
+      position: absolute;
+      margin: 0 auto;
+      left: 0;
+      right: 0;
+      top: -70px;
+      width: 95px;
+      height: 95px;
+      border-radius: 50%;
+      z-index: 9;
+      background: #60c7c1;
+      padding: 0px;
+      box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-login .avatar img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .modal-login.modal-dialog {
+      margin-top: 80px;
+    }
+
+    .modal-login .btn {
+      color: #fff;
+      border-radius: 4px;
+      background: #60c7c1;
+      text-decoration: none;
+      transition: all 0.4s;
+      line-height: normal;
+      border: none;
+    }
+
+    .modal-login .btn:hover,
+    .modal-login .btn:focus {
+      background: #45aba6;
+      outline: none;
+    }
+
+    #chat_form {
+      background: #000;
+      padding: 3px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+
+    #chat_input {
+      border: 0;
+      padding: 10px;
+      width: 25%;
+    }
+
+    #input_form {
+      margin-left: 50%;
+      margin-top: 10px;
+    }
+
+    #chat-box {
+      margin-top: 10%;
+      margin-right: 30%;
+      margin-left: 30%;
+      padding: 3%;
+      height: 350px;
+      overflow-y: auto;
+      z-index: 1;
+    }
+    .right_message {
+      border: 2px solid white;
+      background: #70c5c0;
+      float: right;
+      margin-bottom: 10px;
+      padding: 5px 10px;
+      width: 30%;
+      margin-right: -5%;
+    }
+
+    .left_message {
+      border: 2px solid #ff3399;
+      background: skyblue;
+      float: left;
+      margin-bottom: 10px;
+      padding: 5px 10px;
+      width: 30%;
+      margin-left: -13%;
+    }
+
+    .user{
+      float: left;
+      margin-left: 33%;
+      margin-right: 15%;
+      margin-top: -100px;
+      padding: 10px;
+      font-size: 35px;
+      font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      font-style: italic;
+    }
+    #active_user{
+      float: left;
+      height: 350px;
+      width: 150px;
+      margin-left: 15%;
+    }
+    #online{
+      color: yellowgreen;
+    }
+
+    #offline{
+      color: gray;
+    }
+
+
+  </style>
+</head>
+
+<body>
+
+  <form id="setnickname_form">
+    <div id="Login_form">
+      <div class="modal-dialog modal-login">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="avatar">
+              <img src="https://icon-library.net/images/avatar-icon-png/avatar-icon-png-8.jpg" alt="Avatar">
+            </div>
+            <h4 class="modal-title">Enter Username</h4>
+          </div>
+          <div class="modal-body">
+            <form action="" method="post">
+              <div class="form-group">
+                <input type="text" class="form-control" id="username_id" name="username" placeholder="James Reid"
+                  required="required">
+              </div>
+              <div class="form-group">
+                <button type="submit" id="submit_user" class="btn btn-primary btn-lg btn-block login-btn">Set Username</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="user">
+    <ul id="Welcome_msg"></ul>
+  </div>
+  <div class="modal-content" id="active_user">
+    <h4 style="color: black ; font-family: Verdana, Geneva, Tahoma, sans-serif">&nbsp;&nbsp;Active Users:</h4>
+    <ul id="user_list"></ul>
+  </div>
+  <form id="chat-box" class="modal-content">
+    <section>
+      <ul id="messages"></ul>
+      <div id="typing_id" style="color:#ff6666"></div>
+    </section>
+  </form>
+  <form id="input_form" >
+    <input id="chat_input" class="modal-content" autocomplete="off" style="color: black">&nbsp;<button id="btn" class="btn btn-info btn-sm">Send</button>
+  </form>
+
+
+</body>
+
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+<script>
+  var username = $("#username_id");
+  var users = new Array();
+  var socket = io();
+
+  $(document).ready(function () {
+    $("#input_form").hide();
+    $("#chat-box").hide();
+    $("#active_user").hide();
+    $("#submit_user").click(function () {
+      $("#setnickname_form").hide();
+      $("#chat-box").show();
+      $("#input_form").show();
+      $("#active_user").show();
+    })
+    $('form').submit(function (e) {
+      e.preventDefault();
+      socket.emit('chat message', { username: username.val(), message: $('#chat_input').val() });
+      $('#chat_input').val('');
+      return false;
+    });
+    $("#submit_user").click(function (e) {
+      e.preventDefault();
+      socket.emit('set_username', { username: username.val() })
+      $('#Welcome_msg').append($("<li class='user_text' style='margin-left: 100px'>")).text("Hi "+username.val()+", enjoy chatting!");
+      console.log(username.val());
+    })
+    socket.on('chat message', function (msg) {
+      if (msg.username == username.val()) {
+        $("#messages").append("<div class='right_message'> Me: " + msg.message + "</div><br><br><br>")
+      } else {
+        $("#messages").append("<div class='left_message'>" + msg.username + ": " + msg.message + "</div><br><br><br>")
+      }
+      // $('#messages').append($('<li>').text(msg));
+      // window.scrollTo(0, document.body.scrollHeight);
+    });
+    $("#chat_input").bind("keypress", function () {
+      socket.emit('typing');
+    })
+
+    socket.on('typing', function (msg, err) {
+      console.log(err);
+      $('#typing_id').html(msg.username + " is typing a message...");
+      setTimeout(function () {
+        $("#typing_id").html('');
+      }, 3000);
+    })
+    
+    socket.on('set_username', function(data){
+      $('#user_list').empty();
+      for(let user in data){
+        let user_online = data[user].active
+        if(user_online){
+          $('#user_list').append("<li id='online'>" + '<h4 style="color:black">' + user +'</h4>'+ "</li>");
+        }
+        else{
+          $('#user_list').append("<li id='offline'>" + '<h4 style="color:black">' + user +'</h4>'+ "</li>");
+        }
+      }
+    })
+
+
+
+
+    // socket.on('chat message', function (msg) {
+    //   $("#messages").append("<li><b>" + msg[0] + ":</b> " + msg[1]);
+    // });
+    // socket.on('info', function (inf) {
+    //   $('#messages').append('<li><i>' + inf + '</i></li>');
+    // });
+    // socket.on('users list', function (users) {
+    //   userUpdate(users);
+    // });
+    // socket.on('typing signal', function (users) {
+    //   userUpdate(users);
+    // });
+    // $("#submit_user").click(function () {
+    //   let nickname = $("#username_id").val();
+    //   socket.emit("set nickname", nickname);
+    //   console.log(nickname)
+    // })
+  });
+
+  // function userUpdate(x) {
+  //   let list = document.getElementById("user_list");
+  //   list.innerHTML = "";
+  //   for (var i = 0; i < x.length; i++) {
+  //     let item = document.createElement("li");
+  //     item.innerHTML = x[i];
+  //     list.appendChild(item);
+  //   }
+  // }
+
+</script>
+
+</html>

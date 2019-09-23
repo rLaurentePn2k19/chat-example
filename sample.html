@@ -1,0 +1,36 @@
+<!-- index.html -->
+<html> 
+  <body>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        var socket = io.connect('http://localhost');
+        socket.on('message', function (data) {
+
+          $('#chat').append( '<b>' + data.text + '</b>' + '<br />');
+
+        });
+            $('#send').click(function () {
+            socket.emit('sendMessage', { text: $('#text').val() });
+            $('#text').val('');
+        });
+
+            $('#text').keypress(function(event) {
+              if(event.keyCode == 13) {
+                $('#send').click();
+                $('#text').val('');
+              }
+            });
+
+      });
+    </script>
+
+    <div id="chat" style="width: 500px; height: 300px; border: 1px solid black">
+
+    </div>    
+
+    <input type="text" name="text" id="text">
+    <input type="button" name="send" id="send" value="send">
+  </body>
+</html>
