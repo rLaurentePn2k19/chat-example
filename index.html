@@ -220,7 +220,7 @@
 
   <button id="disconnect_btn" class="btn btn-primary btn-lg btn-block login-btn">Disconnect</button>
 
-  <form id="setnickname_form">
+  <div id="setnickname_form">
     <div id="Login_form">
       <div class="modal-dialog modal-login">
         <div class="modal-content">
@@ -231,20 +231,18 @@
             <h4 class="modal-title">Enter Username</h4>
           </div>
           <div class="modal-body">
-            <form action="" method="post">
               <div class="form-group">
                 <input type="text" class="form-control" id="username_id" name="username" placeholder="James Reid"
-                  required="required">
+                  required>
               </div>
               <div class="form-group">
                 <button type="submit" id="submit_user" class="btn btn-primary btn-lg btn-block login-btn">Set Username</button>
               </div>
-            </form>
           </div>
         </div>
       </div>
     </div>
-  </form>
+  </div>
 
   <div class="user">
     <ul id="Welcome_msg"></ul>
@@ -257,7 +255,7 @@
   <form id="chat-box" class="modal-content">
     <section>
       <ul id="messages"></ul>
-      <div id="typing_id" style="color:#ff6666"></div>
+      <div id="typing_id" style="color:#ff6666; margin-left: -6px;"></div>
     </section>
   </form>
   <form id="input_form">
@@ -272,7 +270,6 @@
 
 <script>
   var username = $("#username_id");
-  var users = new Array();
   var socket = io();
   var disCon_btn = $("#disconnect_btn");
 
@@ -281,6 +278,17 @@
     $("#chat-box").hide();
     $("#active_user").hide();
     $("#disconnect_btn").hide();
+    $("#username_id").keydown(function(){
+      $("#submit_user").attr("disabled", true)
+    })
+    $("#username_id").change(function () {
+      if ($(this).val() != "") {
+        $("#submit_user").attr("disabled", false)
+      } else {
+        $("#submit_user").attr("disabled", true)
+      }
+    })
+    $("#submit_user").attr("disabled", true)
     $("#submit_user").click(function () {
       $("#setnickname_form").hide();
       $("#chat-box").show();
@@ -298,7 +306,7 @@
       e.preventDefault();
       socket.emit('set_username', { username: username.val() })
       $('#Welcome_msg').append($("<li class='user_text' style='margin-left: 100px'>")).text("Hi " + username.val() + ", enjoy chatting!");
-      console.log(username.val());
+      console.log("Connected");
     })
     socket.on('chat message', function (msg) {
       if (msg.username == username.val()) {
@@ -332,10 +340,16 @@
       }
     })
 
-    disCon_btn.click(function(){
-      console.log("clicked")
+    disCon_btn.click(function (e) {
+      console.log("Disconnected")
+      e.preventDefault()
       socket.disconnect();
-      
+      $("#setnickname_form").show();
+      $("#chat-box").hide();
+      $("#input_form").hide();
+      $("#active_user").hide();
+      $("#disconnect_btn").hide();
+      $("#Welcome_msg").hide();
     })
   });
 </script>

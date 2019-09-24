@@ -14,8 +14,6 @@ app.get('/', function(req, res){
 });
 
 io.on('connection', function(socket){
-  
-  socket.username = "Anonymous";
   socket.on('set_username', (function(data){
     socket.username = data.username;
     if(!list_users.hasOwnProperty(data)){
@@ -32,8 +30,10 @@ io.on('connection', function(socket){
     }
     list_users[socket.username].active = false;
     io.sockets.emit('set_username', list_users);
-    console.log(list_users);
     console.log('user disconnected '+ socket.username);
+    let used = socket.username;
+    delete list_users[used];
+    console.log(list_users);
   });
   socket.on('chat message', function(msg){
     io.emit('chat message', msg);
